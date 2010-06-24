@@ -1,0 +1,3 @@
+include quotehi/config/deployment.ini_tmpl
+recursive-include quotehi/public *
+recursive-include quotehi/templates *
