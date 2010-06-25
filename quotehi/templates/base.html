@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title></title>
+    <title>QuoteHI - ${self.title()}</title>
   </head>
 
   <body>
@@ -14,10 +14,15 @@
 
 <%def name="header()">
   <h1>QuoteHI</h1>
+  <p>
+    <a href="${url(controller='show', action='index')}">Home</a>
+    <a href="${url(controller='post', action='add')}">Add</a>
   <hr />
 </%def>
 
 <%def name="footer()">
   <hr/>
-  <p>Powered by QuoteHI. QuoteHI is licensed under the MIT license.</p>
+  <p>Powered by QuoteHI.</p>
 </%def>
+
+<%def name="title()">QuoteHI</%def>
