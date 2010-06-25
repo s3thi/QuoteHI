@@ -1,0 +1,55 @@
+
+<%inherit file="base.html"/>
+
+<script language="javascript" type="text/javascript">
+  function vote_request(url, id, delta) {
+    vote_buttons = document.getElementById("vote_" + id);
+    vote_buttons.innerHTML = "<strong>Please wait ...</strong>";
+    vote_count = document.getElementById("count_" + id);
+    
+    if (window.XMLHttpRequest)
+      xmlhttp = new XMLHttpRequest();
+    else
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    
+    xmlhttp.onreadystatechange = 
+      function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          vote_buttons.innerHTML = "";
+          votes = parseInt(vote_count.innerHTML.split(" ")[0]);
+          votes += delta;
+          vote_count.innerHTML = votes + " votes";
+        }
+      };
+    
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+  }
+</script>
+
+% for quote in c.quotes:
+<div id="quote" style="background-color:#EEEEFF">
+    <p>${quote['quote']}</p>
+    <strong>Tags:</strong>
+%   for tag in quote['tags']:
+      ${tag} 
+%   endfor
+%   if quote['notes']:
+        <p><strong>Notes:</strong> ${quote['notes']}</p>
+%   endif
+    <p id="count_${quote['_id']}">${quote['votes']} votes 
+      <span id="vote_${quote['_id']}"> 
+      <button type="button" onclick="vote_request('${url(controller='post',
+				      action='vote_up', id=quote['_id'])}',
+				      '${quote['_id']}', 1)">
+	 Vote Up</button>
+       <button type="button" onclick="vote_request('${url(controller='post',
+				      action='vote_down', id=quote['_id'])}',
+				      '${quote['_id']}', -1)">
+	 Vote Down</button>
+       </span>
+    </p>
+</div>
+% endfor
+
+<%def name="title()">Home</%def>
