@@ -6,6 +6,7 @@ from pylons import app_globals
 import quotehi.lib.helpers as h
 
 from quotehi.lib.base import BaseController, render
+from pymongo.objectid import ObjectId
 
 log = logging.getLogger(__name__)
 
@@ -16,8 +17,8 @@ class PostController(BaseController):
             quotes_coll = app_globals.db.quotes
             tags = request.POST['tags'].split()
             quotes_coll.insert({ 'quote': request.POST['quote'],
+                                 'notes': request.POST['notes'],
                                  'tags': tags, 'votes': 1})
-            c.submitted = True
             h.redirect(url(controller='post', action='added'))
         
         return render('/add.html')
@@ -25,11 +26,17 @@ class PostController(BaseController):
     def added(self):
         return render('/added.html')
 
-    def vote_up(self):
-        return 'Vote up.'
+    def _change_vote(self, by, id):
+        quotes_coll = app_globals.db.quotes
+        quote = quotes_coll.find_one({'_id': ObjectId(id)})
+        quote['votes'] += by
+        quotes_coll.save(quote)        
 
-    def vote_down(self):
-        return 'Vote down.'
+    def vote_up(self, id):
+        self._change_vote(1, id)
+
+    def vote_down(self, id):
+        self._change_vote(-1, id)
 
     def report(self):
         return 'Report.'
