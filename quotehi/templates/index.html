@@ -37,17 +37,22 @@
 %   if quote['notes']:
         <p><strong>Notes:</strong> ${quote['notes']}</p>
 %   endif
-    <p id="count_${quote['_id']}">${quote['votes']} votes 
+    <p>
+    <span id="count_${quote['_id']}">${quote['votes']} votes </span>
+%     if str(quote['_id']) not in session: 
       <span id="vote_${quote['_id']}"> 
       <button type="button" onclick="vote_request('${url(controller='post',
-				      action='vote_up', id=quote['_id'])}',
-				      '${quote['_id']}', 1)">
+				      action='vote_up',
+				      id=str(quote['_id']))}',
+				      '${str(quote['_id'])}', 1)">
 	 Vote Up</button>
        <button type="button" onclick="vote_request('${url(controller='post',
-				      action='vote_down', id=quote['_id'])}',
-				      '${quote['_id']}', -1)">
+				      action='vote_down',
+				      id=str(quote['_id']))}',
+				      '${str(quote['_id'])}', -1)">
 	 Vote Down</button>
        </span>
+%      endif
     </p>
 </div>
 % endfor

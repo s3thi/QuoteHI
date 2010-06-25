@@ -27,13 +27,16 @@ class PostController(BaseController):
         return render('/added.html')
 
     def _change_vote(self, by, id):
-        quotes_coll = app_globals.db.quotes
-        quote = quotes_coll.find_one({'_id': ObjectId(id)})
-        quote['votes'] += by
-        quotes_coll.save(quote)        
+        if not id in session:
+            quotes_coll = app_globals.db.quotes
+            quote = quotes_coll.find_one({'_id': ObjectId(id)})
+            quote['votes'] += by
+            quotes_coll.save(quote)
+            session[id] = True
+            session.save()
 
     def vote_up(self, id):
-        self._change_vote(1, id)
+            self._change_vote(1, id)
 
     def vote_down(self, id):
         self._change_vote(-1, id)
