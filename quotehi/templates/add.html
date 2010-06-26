@@ -1,11 +1,31 @@
 
 <%inherit file="base.html"/>
 
-<form action="add" method="POST">
-  <p>Content: <textarea rows=10 cols=50 name="quote"></textarea></p>
-  <p>Notes: <input type="text" name="notes"/></p>
-  <p>Tags: <input type="text" name="tags"/></p>
-  <p><input type="submit"/></p>
-</form>
+<script language="javascript" type="text/javascript">
+  function add_quote() {
+    $("div#submitting").html = "Submitting quote ...";
+    var quote = $("textarea#quote").val();
+    var notes = $("input#notes").val();
+    var tags = $("input#tags").val();
+    
+    $.post("${url(controller='post', action='add')}", 
+      {"quote": quote, "notes": notes, "tags": tags},
+      function(response) {
+        var success_msg = "Your quote was submitted. You can now \
+        return to the <a href=\"${url(controller='show', action='index')}\">\
+	home page</a> or continue adding quotes below.";
+        $("div#success_msg").html(success_msg);
+        $("div#submitting").html("");
+      }
+    );
+  }
+</script>
+
+<div id="success_msg"></p></div>
+<p>Content:<br/><textarea rows=10 cols=50 id="quote"></textarea></p>
+<p>Notes:<br/><input type="text" id="notes"/></p>
+<p>Tags:<br/><input type="text" id="tags"/></p>
+<p><button onclick="add_quote()">Add Quote</button>
+   <div id="submitting"></div></p>
 
 <%def name="title()">Add New Quote</%def>
