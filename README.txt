@@ -35,5 +35,7 @@ Installation and Setup
 
     $ paster serve development.ini
 
+  You should now be able to access it from http://127.0.0.1:5000.
+
 
   Tested and confirmed working inside a virtualenv.
