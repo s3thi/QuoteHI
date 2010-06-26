@@ -1,19 +1,39 @@
-This file is for you to describe the QuoteHI application. Typically
-you would include information such as the information below:
+
+QuoteHI is a Pylons application for collecting IRC quotes. I wrote
+this to experiment with writing webapps in Python.
 
 Installation and Setup
 ======================
 
-Install ``QuoteHI`` using easy_install::
 
-    easy_install QuoteHI
+  Step 1: Install Pylons and its dependencies:
 
-Make a config file as follows::
+    $ sudo easy_install pylons
 
-    paster make-config QuoteHI config.ini
+  I've tested the application with Pylons 1.0 on Linux and OS X.
+  
+  
+  Step 2: Install MongoDB. Linux users can find the instructions on
+  MongoDB.org. OS X users with MacPorts can do:
 
-Tweak the config file as appropriate and then setup the application::
+    $ sudo port install mongodb
 
-    paster setup-app config.ini
+  
+  Step 3: Install PyMongo:
 
-Then you are ready to go.
+    $ sudo easy_install pymongo
+
+  Alternatively, download and install it from the archive on MongoDB.org.
+
+  
+  Step 4: Run MongoDB:
+
+    $ mongod --dbpath=/path/to/data/directory/
+
+
+  Step 5: Run QuoteHI:
+
+    $ paster serve development.ini
+
+
+  Tested and confirmed working inside a virtualenv.
