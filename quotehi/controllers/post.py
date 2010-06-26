@@ -14,6 +14,10 @@ class PostController(BaseController):
 
     def add(self):
         if len(request.POST) > 0:
+            if len(request.POST['quote']) == 0:
+                response.status_int = 500
+                return 'You must enter a quote.'
+            
             quotes_coll = app_globals.db.quotes
             tags = request.POST['tags'].split()
             quotes_coll.insert({ 'quote': request.POST['quote'],

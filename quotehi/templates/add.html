@@ -2,28 +2,46 @@
 <%inherit file="base.html"/>
 
 <script language="javascript" type="text/javascript">
+  
+  function add_quote_success(data, status, xmlhttp) {
+    var success_msg = "Your quote was submitted. You can now \
+      return to the <a href=\"${url(controller='show', action='index')}\">\
+      home page</a> or continue adding quotes below.";
+    $("div#status").html(success_msg);
+  }
+
+  function add_quote_fail(xmlhttp, status, error) {
+    var fail_message = "Failed to submit quote. Server returned: ";
+    fail_message += xmlhttp.responseText;
+    $("div#status").html(fail_message);
+  }
+  
   function add_quote() {
+    if($("textarea#quote").val() == "") {
+      alert("You must enter a quote.");
+      return;
+    }
+    
     $("button#submitting").html("Adding quote ...");
     $("button#submitting").attr("disabled", "disabled");
     var quote = $("textarea#quote").val();
     var notes = $("input#notes").val();
     var tags = $("input#tags").val();
     
-    $.post("${url(controller='post', action='add')}", 
-      {"quote": quote, "notes": notes, "tags": tags},
-      function(response) {
-        var success_msg = "Your quote was submitted. You can now \
-        return to the <a href=\"${url(controller='show', action='index')}\">\
-	home page</a> or continue adding quotes below.";
-        $("div#success_msg").html(success_msg);
-        $("button#submitting").html("Add Quote");
-        $("button#submitting").attr("disabled", false);
-      }
-    );
+    $.ajax({
+      type: "POST",
+      url: "${url(controller='post', action='add')}",
+      data: {"quote": quote, "notes": notes, "tags": tags},
+      success: add_quote_success,
+      error: add_quote_fail,
+    });
+
+    $("button#submitting").html("Add Quote");
+    $("button#submitting").attr("disabled", false);
   }
 </script>
 
-<div id="success_msg"></div>
+<div id="status"></div>
 <p>Content:<br/><textarea rows=10 cols=50 id="quote"></textarea></p>
 <p>Notes:<br/><input type="text" id="notes"/></p>
 <p>Tags:<br/><input type="text" id="tags"/></p>
