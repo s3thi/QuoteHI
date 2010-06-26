@@ -19,12 +19,7 @@ class PostController(BaseController):
             quotes_coll.insert({ 'quote': request.POST['quote'],
                                  'notes': request.POST['notes'],
                                  'tags': tags, 'votes': 1})
-            h.redirect(url(controller='post', action='added'))
-        
         return render('/add.html')
-
-    def added(self):
-        return render('/added.html')
 
     def _change_vote(self, by, id):
         if not id in session:
