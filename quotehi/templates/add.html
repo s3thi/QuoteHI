@@ -42,9 +42,9 @@
 </script>
 
 <div id="status"></div>
-<p>Content:<br/><textarea rows=10 cols=50 id="quote"></textarea></p>
-<p>Notes:<br/><input type="text" id="notes"/></p>
-<p>Tags:<br/><input type="text" id="tags"/></p>
+<p>Content:<br/>${h.textarea('quote', rows=10, cols=50)}</p>
+<p>Notes:<br/>${h.text('notes')}</p>
+<p>Tags:<br/>${h.text('tags')}</p>
 <p><button id="submitting" onclick="add_quote()">Add Quote</button></p>
 
 <%def name="title()">Add New Quote</%def>
