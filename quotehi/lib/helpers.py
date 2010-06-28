@@ -7,12 +7,12 @@ available to Controllers. This module is available to templates as 'h'.
 #from webhelpers.html.tags import checkbox, password
 from pylons import session, url
 from pylons.controllers.util import redirect
+from webhelpers.html.tags import *
+from decorator import decorator
 
-def simple_auth(controller):
-    def controller_auth(self):
-        if session.get('logged_in'):
-            controller()
-        else:
-            redirect(url(controller='admin', action='login'))
-    
-    return controller_auth
+@decorator
+def simple_auth(action, *args, **kwargs):
+    if session.get('logged_in') is True:
+        return action(*args, **kwargs)
+    else:
+        redirect(url(controller='admin', action='login'))

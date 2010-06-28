@@ -23,7 +23,8 @@ class PostController(BaseController):
             quotes_coll.insert({ 'quote': request.POST['quote'],
                                  'notes': request.POST['notes'],
                                  'tags': tags, 'votes': 1})
-        return render('/add.html')
+        else:
+            return render('/add.html')
 
     def _change_vote(self, by, id):
         if not id in session:
