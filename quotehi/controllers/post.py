@@ -40,5 +40,8 @@ class PostController(BaseController):
     def vote_down(self, id):
         self._change_vote(-1, id)
 
-    def report(self):
+    def flag(self, id):
         return 'Report.'
+
+    def queue(self):
+        return 'Queue.'

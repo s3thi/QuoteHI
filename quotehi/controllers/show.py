@@ -15,6 +15,3 @@ class ShowController(BaseController):
         quotes = quotes_coll.find().skip(0).limit(10)
         c.quotes = quotes
         return render('index.html')
-        
-    def queue(self):
-        return 'Queue.'
