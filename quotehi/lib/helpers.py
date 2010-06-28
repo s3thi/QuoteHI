@@ -10,7 +10,7 @@ from pylons.controllers.util import redirect
 
 def simple_auth(controller):
     def controller_auth(self):
-        if 'logged_in' in session and session['logged_in']:
+        if session.get('logged_in'):
             controller()
         else:
             redirect(url(controller='admin', action='login'))
