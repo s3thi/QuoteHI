@@ -16,3 +16,5 @@ class ShowController(BaseController):
         c.quotes = quotes
         return render('index.html')
         
+    def queue(self):
+        return 'Queue.'
