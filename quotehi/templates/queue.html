@@ -12,31 +12,35 @@
   }
 </script>
 
-% for quote in c.quotes:
-  <div id="${quote['_id']}" style="background-color:#EEEEFF">
-    <pre>${quote['quote']}</pre>
-%  if quote['tags']:
-     <p><strong>Tags:</strong>
-%    for tag in quote['tags']:
-       ${tag} 
-%    endfor
-     </p>
-%  endif
-%  if quote['notes']:
-        <p><strong>Notes:</strong> ${quote['notes']}</p>
-%  endif
-   <p><strong>ID:</strong> ${quote['_id']}</p>
-%  if session.get('logged_in') is True:
-     <button id="approve" onclick="approve('${url(
-				   controller='admin', action='approve',
-				   id=quote['_id'])}')">
-       Approve</button>
-     <button id="discard" onclick="discard('${url(
-				   controller='admin', action='discard',
-				   id=quote['_id'])}')">
-       Discard</button>
-%  endif
-  </div>
-% endfor
+% if c.quotes.count() == 0:
+  <p>Nothing to see here, please move along.</p>
+% else:
+%   for quote in c.quotes:
+    <div id="${quote['_id']}" style="background-color:#EEEEFF">
+      <pre>${quote['quote']}</pre>
+%    if quote['tags']:
+       <p><strong>Tags:</strong>
+%      for tag in quote['tags']:
+         ${tag} 
+%      endfor
+       </p>
+%    endif
+%    if quote['notes']:
+          <p><strong>Notes:</strong> ${quote['notes']}</p>
+%    endif
+     <p><strong>ID:</strong> ${quote['_id']}</p>
+%    if session.get('logged_in') is True:
+       <button id="approve" onclick="approve('${url(
+  				     controller='admin', action='approve',
+				     id=quote['_id'])}')">
+         Approve</button>
+       <button id="discard" onclick="discard('${url(
+				     controller='admin', action='discard',
+				     id=quote['_id'])}')">
+         Discard</button>
+%    endif
+    </div>
+%   endfor
+% endif
 
 <%def name="title()">Queue</%def>
