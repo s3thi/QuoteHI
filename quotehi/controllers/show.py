@@ -14,4 +14,10 @@ class ShowController(BaseController):
         quotes_coll = app_globals.db.quotes
         quotes = quotes_coll.find().skip(0).limit(10)
         c.quotes = quotes
-        return render('index.html')
+        return render('/index.html')
+
+    def queue(self):
+        quotes_queue = app_globals.db.quotes.queue
+        quotes = quotes_queue.find().skip(0).limit(10)
+        c.quotes = quotes
+        return render('/queue.html')

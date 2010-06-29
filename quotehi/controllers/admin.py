@@ -7,6 +7,7 @@ from pylons.controllers.util import abort, redirect
 from quotehi.lib.base import BaseController, render
 from quotehi.lib.helpers import simple_auth
 from hashlib import sha256
+from pymongo.objectid import ObjectId
 
 log = logging.getLogger(__name__)
 
@@ -42,7 +43,11 @@ class AdminController(BaseController):
 
     @simple_auth
     def approve(self, id):
-        return 'Approved.'
+        quotes_queue = app_globals.db.quotes.queue
+        quote = quotes_queue.find_one({'_id': ObjectId(id)})
+        quotes_queue.remove(quote)
+        quotes_coll = app_globals.db.quotes
+        quotes_coll.insert(quote)
 
     @simple_auth
     def delete(self, id):

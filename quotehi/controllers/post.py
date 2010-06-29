@@ -18,9 +18,9 @@ class PostController(BaseController):
                 response.status_int = 500
                 return 'You must enter a quote.'
             
-            quotes_coll = app_globals.db.quotes
+            quotes_queue = app_globals.db.quotes.queue
             tags = request.POST['tags'].split()
-            quotes_coll.insert({ 'quote': request.POST['quote'],
+            quotes_queue.insert({ 'quote': request.POST['quote'],
                                  'notes': request.POST['notes'],
                                  'tags': tags, 'votes': 1})
         else:

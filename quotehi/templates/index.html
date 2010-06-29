@@ -51,6 +51,9 @@
 				      id=str(quote['_id']))}',
 				      '${str(quote['_id'])}', -1)">
 	 Vote Down</button>
+%        if session.get('logged_in') is True:
+           <button onclick="delete()">Delete</button>
+%        endif
        </span>
 %      endif
     </p>

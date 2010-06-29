@@ -20,6 +20,7 @@
   <p>
     <a href="${url(controller='show', action='index')}">Home</a>
     <a href="${url(controller='post', action='add')}">Add</a>
+    <a href="${url(controller='show', action='queue')}">Queue</a>
 %   if session.get('logged_in') is True: 
       <a href="${url(controller='admin', action='logout')}">
 	Logout (${session.get('email')})</a>
