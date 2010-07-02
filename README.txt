@@ -31,11 +31,16 @@ Installation and Setup
     $ mongod --dbpath=/path/to/data/directory/
 
 
-  Step 5: Run QuoteHI:
+  Step 5: Setup QuoteHI:
+
+    $ paster setup-app development.ini
+
+  Step 6: Run QuoteHI:
 
     $ paster serve development.ini
 
   You should now be able to access it from http://127.0.0.1:5000.
 
 
-  Tested and confirmed working inside a virtualenv.
+  Tested and confirmed working inside a virtualenv. Warning: do not use the
+  default configuration file (development.ini) in a production environment.
