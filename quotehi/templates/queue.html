@@ -2,14 +2,24 @@
 <%inherit file="/base.html"/>
 
 <script language="javascript" type="text/javascript">
-  function approve(url, id) {
-    $("button#approve").html("Approving ...");
-    $.ajax({
-      "type": "POST",
-      "url": url
+  $(document).ready(function() {
+  $(".approve").click(function() {
+      $.ajax({
+        "url": $(this).val(),
+        "type": "POST",
+        "context": $(this),
+        "success": function() {
+          var id = $(this).val().split("/").pop();
+          if($(this).attr("id") == "approve")
+            var color = "#00ff00";
+          else
+            var color = "#ff0000";
+          $("div#" + id).css("background-color", color);
+          $("div#" + id).fadeOut(500);
+        },
+      });
     });
-    $("div#" + id).remove();
-  }
+  });
 </script>
 
 % if c.quotes.count() == 0:
@@ -30,14 +40,13 @@
 %    endif
      <p><strong>ID:</strong> ${quote['_id']}</p>
 %    if session.get('logged_in') is True:
-       <button id="approve" onclick="approve('${url(
-  				     controller='admin', action='approve',
-				     id=quote['_id'])}')">
-         Approve</button>
-       <button id="discard" onclick="discard('${url(
-				     controller='admin', action='discard',
-				     id=quote['_id'])}')">
-         Discard</button>
+       <button class="approve" id="approve" value="${url(controller='admin',
+				   action='approve', id=quote['_id'])}">
+	 Approve</button>
+       <button class="approve" id="discard" value="${url(controller='admin',
+				   action='discard', id=quote['_id'])}">
+	 Discard</button>
+
 %    endif
     </div>
 %   endfor
