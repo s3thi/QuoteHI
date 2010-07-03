@@ -2,49 +2,34 @@
 <%inherit file="base.html"/>
 
 <script language="javascript" type="text/javascript">
-  
-  function add_quote_success(data, status, xmlhttp) {
-    var success_msg = "Your quote was submitted. You can now \
-      return to the <a href=\"${url(controller='show', action='index')}\">\
-      home page</a> or continue adding quotes below.";
-    $("div#status").html(success_msg);
-  }
-
-  function add_quote_fail(xmlhttp, status, error) {
-    var fail_message = "Failed to submit quote. Server returned: ";
-    fail_message += xmlhttp.responseText;
-    $("div#status").html(fail_message);
-  }
-  
-  function add_quote() {
-    if($("textarea#quote").val() == "") {
-      alert("You must enter a quote.");
-      return;
-    }
-    
-    $("button#submitting").html("Adding quote ...");
-    $("button#submitting").attr("disabled", "disabled");
-    var quote = $("textarea#quote").val();
-    var notes = $("input#notes").val();
-    var tags = $("input#tags").val();
-    
-    $.ajax({
-      type: "POST",
-      url: "${url(controller='post', action='add')}",
-      data: {"quote": quote, "notes": notes, "tags": tags},
-      success: add_quote_success,
-      error: add_quote_fail,
+  $(document).ready(function() {
+    $("button#add").click(function() {
+      if($("textarea#quote").val() == "")
+        alert("You must enter a quote.");
+      else {
+        $(this).html("Adding quote ...").attr("disabled", "disabled");
+        $.ajax({
+          "url": "${url(controller='post', action='add')}",
+          "data": {"quote": $("textarea#quote").val(), 
+                   "notes": $("input#notes").val(),
+                   "tags": $("input#tags").val()},
+          "type": "POST",
+          "success": function() {
+            $("button#add").html("Add Quote").attr("disabled", "");
+            $("div#status")
+              .html("Done! You may continue adding quotes below.")
+              .hide().fadeIn(500);
+          }
+        });
+      }
     });
-
-    $("button#submitting").html("Add Quote");
-    $("button#submitting").attr("disabled", false);
-  }
+  });
 </script>
 
 <div id="status"></div>
 <p>Content:<br/>${h.textarea('quote', rows=10, cols=50)}</p>
 <p>Notes:<br/>${h.text('notes')}</p>
 <p>Tags:<br/>${h.text('tags')}</p>
-<p><button id="submitting" onclick="add_quote()">Add Quote</button></p>
+<p><button id="add">Add Quote</button></p>
 
 <%def name="title()">Add New Quote</%def>
