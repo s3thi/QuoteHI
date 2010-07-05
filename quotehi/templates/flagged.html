@@ -21,30 +21,34 @@
   });
 </script>
 
-% for quote in c.quotes:
-<div id="${quote['_id']}" style="background-color:#EEEEFF">
-    <pre>${quote['quote']}</pre>
-    <strong>Tags:</strong>
-%   for tag in quote['tags']:
-      ${tag} 
-%   endfor
-%   if quote['notes']:
-        <p><strong>Notes:</strong> ${quote['notes']}</p>
-%   endif
-    <p><strong>ID:</strong> ${quote['_id']}</p>
-    <p>
-%        if session.get('logged_in') is True:
-           <button class="approve"
-		   id="delete" value="${url(controller='admin',
-				      action='delete',
+% if c.quotes.count() == 0:
+  <p>Nothing to see here, please move along.</p>
+% else:
+%   for quote in c.quotes:
+  <div id="${quote['_id']}" style="background-color:#EEEEFF">
+      <pre>${quote['quote']}</pre>
+      <strong>Tags:</strong>
+%     for tag in quote['tags']:
+        ${tag} 
+%     endfor
+%     if quote['notes']:
+          <p><strong>Notes:</strong> ${quote['notes']}</p>
+%     endif
+      <p><strong>ID:</strong> ${quote['_id']}</p>
+      <p>
+%          if session.get('logged_in') is True:
+             <button class="approve"
+  		   id="delete" value="${url(controller='admin',
+  				      action='delete',
 				      id=quote['_id'])}">Delete</button>
-           <button class="approve" 
-		   id="unflag" value="${url(controller='admin',
-				      action='unflag',
-				      id=quote['_id'])}">Unflag</button>
-%        endif
-</div>
-% endfor
+             <button class="approve" 
+  		   id="unflag" value="${url(controller='admin',
+  				      action='unflag',
+  				      id=quote['_id'])}">Unflag</button>
+%          endif
+  </div>
+%   endfor
+% endif
 
 ${self.paginate('show', 'flagged', c.pages, c.current_page)}
 

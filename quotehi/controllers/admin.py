@@ -51,11 +51,16 @@ class AdminController(BaseController):
 
     @simple_auth
     def delete(self, id):
-        return 'Deleted.'
+        quotes_coll = app_globals.db.quotes
+        quote = quotes_coll.find_one({'_id': ObjectId(id)})
+        quotes_coll.remove(quote)
 
     @simple_auth
     def unflag(self, id):
-        return 'Unflagged.'
+        quotes_coll = app_globals.db.quotes
+        quote = quotes_coll.find_one({'_id': ObjectId(id)})
+        del quote['flagged']
+        quotes_coll.save(quote)
 
     @simple_auth
     def discard(self, id):
