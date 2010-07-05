@@ -5,7 +5,7 @@ from pylons import app_globals
 from pylons.controllers.util import abort, redirect
 
 from quotehi.lib.base import BaseController, render
-from quotehi.lib.helpers import simple_auth
+from quotehi.lib.simple_auth import simple_auth
 from hashlib import sha256
 from pymongo.objectid import ObjectId
 
