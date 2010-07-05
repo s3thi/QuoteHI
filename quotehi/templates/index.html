@@ -2,6 +2,20 @@
 <%inherit file="/base.html"/>
 
 <script language="javascript" type="text/javascript">
+
+  $(document).ready(function() {
+    $("button#flag").click(function() {
+      $.ajax({
+        "url": $(this).val(),
+        "method": "POST",
+        "context": $(this),
+        "success": function() {
+          $(this).fadeOut(150);
+        }
+      });
+    });
+  });
+
   function vote_request(url, id, delta) {
     vote_buttons = document.getElementById("vote_" + id);
     vote_buttons.innerHTML = "<strong>Please wait ...</strong>";
@@ -51,6 +65,10 @@
 				      id=str(quote['_id']))}',
 				      '${str(quote['_id'])}', -1)">
 	 Vote Down</button>
+%        if not quote['_id'] in c.flagged:
+       <button id="flag" value="${url(controller='post', action='flag',
+				id=quote['_id'])}">Flag</button>
+%        endif
 %        if session.get('logged_in') is True:
            <button onclick="delete()">Delete</button>
 %        endif

@@ -42,7 +42,9 @@ class PostController(BaseController):
         self._change_vote(-1, id)
 
     def flag(self, id):
-        return 'Report.'
+        # No need to check for dupes here.
+        flagged_queue = app_globals.db.quotes.flagged
+        flagged_queue.save({'_id': ObjectId(id)})
 
     def queue(self):
         return 'Queue.'
