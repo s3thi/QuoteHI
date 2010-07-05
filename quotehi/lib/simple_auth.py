@@ -1,5 +1,6 @@
 from decorator import decorator
 from pylons import session, url
+from pylons.controllers.util import redirect
 
 @decorator
 def simple_auth(action, *args, **kwargs):
