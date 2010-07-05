@@ -1,7 +1,51 @@
 <%inherit file="/base.html"/>
 
+<script language="javascript" type="text/javascript">
+  $(document).ready(function() {
+    $(".approve").click(function() {
+      $.ajax({
+        "url": $(this).val(),
+        "method": "POST",
+        "context": $(this),
+        "success": function() {
+          var id = $(this).val().split("/").pop();
+          if($(this).attr("id") == "unflag")
+            var color = "#00ff00";
+          else
+            var color = "#ff0000";
+          $("div#" + id).css("background-color", color);
+          $("div#" + id).fadeOut(500);
+        },
+      });
+    });
+  });
+</script>
+
 % for quote in c.quotes:
-    <div>${quote['quote']}</div>
+<div id="${quote['_id']}" style="background-color:#EEEEFF">
+    <pre>${quote['quote']}</pre>
+    <strong>Tags:</strong>
+%   for tag in quote['tags']:
+      ${tag} 
+%   endfor
+%   if quote['notes']:
+        <p><strong>Notes:</strong> ${quote['notes']}</p>
+%   endif
+    <p><strong>ID:</strong> ${quote['_id']}</p>
+    <p>
+%        if session.get('logged_in') is True:
+           <button class="approve"
+		   id="delete" value="${url(controller='admin',
+				      action='delete',
+				      id=quote['_id'])}">Delete</button>
+           <button class="approve" 
+		   id="unflag" value="${url(controller='admin',
+				      action='unflag',
+				      id=quote['_id'])}">Unflag</button>
+%        endif
+</div>
 % endfor
 
-${c.pages}
+${self.paginate('show', 'flagged', c.pages, c.current_page)}
+
+<%def name="title()">Flagged Quotes</%def>

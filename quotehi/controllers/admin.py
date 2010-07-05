@@ -54,6 +54,10 @@ class AdminController(BaseController):
         return 'Deleted.'
 
     @simple_auth
+    def unflag(self, id):
+        return 'Unflagged.'
+
+    @simple_auth
     def discard(self, id):
         quotes_queue = app_globals.db.quotes.queue
         quotes_queue.remove({'_id': ObjectId(id)})
