@@ -22,15 +22,23 @@ class ShowController(BaseController):
 
     @simple_auth
     def flagged(self, id=1):
-        self._setup_pagination('quotes', id)
+        self._setup_pagination('quotes', id, flagged=True)
         return render('/flagged.html')
 
-    def _setup_pagination(self, db, id):
+    def _setup_pagination(self, db, id, **kwargs):
         quotes_per_page = 10
         quotes_coll = app_globals.db[db]
-        c.pages = int((quotes_coll.count() - 1) / quotes_per_page + 1)
         c.current_page = int(id)
-        c.quotes = quotes_coll.find().skip(
-            (int(id)-1) * quotes_per_page).\
-            limit(quotes_per_page).\
-            sort('_id', ASCENDING)
+        if 'flagged' in kwargs:
+            c.quotes = quotes_coll.find({'flagged': kwargs['flagged']}).\
+                skip((int(id)-1) * quotes_per_page).\
+                limit(quotes_per_page).\
+                sort('_id', ASCENDING)
+            c.pages = quotes_coll.find({'flagged': kwargs['flagged']}).\
+                count()
+        else:
+            c.quotes = quotes_coll.find().skip(
+                (int(id)-1) * quotes_per_page).\
+                limit(quotes_per_page).\
+                sort('_id', ASCENDING)
+            c.pages = int((quotes_coll.count() - 1) / quotes_per_page + 1)

@@ -52,5 +52,6 @@
 %   endfor
 % endif
 
-<%include file="/paginate.html"/>
+${self.paginate('show', 'queue', c.pages, c.current_page)}
+
 <%def name="title()">Queue</%def>

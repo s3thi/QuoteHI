@@ -1,8 +1,7 @@
 <%inherit file="/base.html"/>
 
 % for quote in c.quotes:
-    <div>${quote['_id']}</div>
+    <div>${quote['quote']}</div>
 % endfor
 
-
-<%include file="/paginate.html"/>
+${c.pages}

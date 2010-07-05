@@ -79,6 +79,6 @@
 </div>
 % endfor
 
-<%include file="/paginate.html"/>
+${self.paginate('show', 'index', c.pages, c.current_page)}
 
 <%def name="title()">Home</%def>
