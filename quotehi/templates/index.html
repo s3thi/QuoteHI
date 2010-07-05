@@ -51,6 +51,7 @@
 %   if quote['notes']:
         <p><strong>Notes:</strong> ${quote['notes']}</p>
 %   endif
+    <p><strong>ID:</strong> ${quote['_id']}</p>
     <p>
     <span id="count_${quote['_id']}">${quote['votes']} votes </span>
 %     if str(quote['_id']) not in session: 
@@ -65,7 +66,7 @@
 				      id=str(quote['_id']))}',
 				      '${str(quote['_id'])}', -1)">
 	 Vote Down</button>
-%        if not quote['_id'] in c.flagged:
+%        if not 'flagged' in quote:
        <button id="flag" value="${url(controller='post', action='flag',
 				id=quote['_id'])}">Flag</button>
 %        endif
