@@ -18,20 +18,20 @@ class PostController(BaseController):
                 response.status_int = 500
                 return 'You must enter a quote.'
             
-            quotes_queue = app_globals.db.quotes.queue
+            quote = self.db.quotes.queue.Quote()
+            quote['quote'] = request.POST['quote']
+            quote['notes'] = request.POST['notes']
             tags = request.POST['tags'].split()
-            quotes_queue.insert({ 'quote': request.POST['quote'],
-                                 'notes': request.POST['notes'],
-                                 'tags': tags, 'votes': 1})
+            quote['tags'] = tags
+            quote.save()
         else:
             return render('/add.html')
 
     def _change_vote(self, by, id):
         if not id in session:
-            quotes_coll = app_globals.db.quotes
-            quote = quotes_coll.find_one({'_id': ObjectId(id)})
+            quote = self.db.quotes.one({'_id': ObjectId(id)})
             quote['votes'] += by
-            quotes_coll.save(quote)
+            self.db.quotes.save(quote)
             session[id] = True
             session.save()
 
@@ -42,9 +42,9 @@ class PostController(BaseController):
         self._change_vote(-1, id)
 
     def flag(self, id):
-        quote = app_globals.db.quotes.find_one({'_id': ObjectId(id)})
+        quote = self.db.quotes.one({'_id': ObjectId(id)})
         quote['flagged'] = True
-        app_globals.db.quotes.save(quote)
+        self.db.quotes.save(quote)
 
     def queue(self):
         return 'Queue.'
