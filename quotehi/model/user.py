@@ -1,6 +1,14 @@
 from mongokit import Document
 from formencode import Invalid
-from formencode.validators import Email
+from formencode.validators import Email, PlainText
+
+def name_validator(name):
+    try:
+        p = PlainText()
+        p.to_python(name)
+        return True
+    except Invalid:
+        return False
 
 def email_validator(email):
     try:
@@ -18,4 +26,4 @@ class User(Document):
     }
 
     required_fields = ['name', 'email', 'password']
-    validators = {'email': email_validator}
+    validators = {'name': name_validator, 'email': email_validator}
