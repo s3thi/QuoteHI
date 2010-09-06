@@ -21,6 +21,7 @@ def setup_app(command, conf, vars):
     db_conn = connect(conf)
     db_conn.register([User])
     users_collection = db_conn[conf['mongo.db']].users
+    _ = unicode
     
     if usercount(users_collection) == 0:
         print('No existing users found. Creating new user ...')
@@ -29,15 +30,14 @@ def setup_app(command, conf, vars):
         email = raw_input('Email for new user: ')
         password = getpass('Password for new user: ')
         user = users_collection.User()
-        user['name'], user['email'] = unicode(name), unicode(email)
-        user['password'] = unicode(encrypt_password(email, password))
-        user.save()
+        user['name'], user['email'] = _(name), _(email)
 
-
-def encrypt_password(email, password):
         random.seed()
         salt = random.randint(10000000000, 99999999999)
-        return sha256(password + str(salt) + email).hexdigest()
+        password = sha256(password + str(salt) + email).hexdigest()
+
+        user['password'], user['salt'] = _(password), _(salt)
+        user.save()
 
 
 def usercount(db):

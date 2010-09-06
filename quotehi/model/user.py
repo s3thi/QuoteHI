@@ -22,8 +22,9 @@ class User(Document):
     structure = {
             'name': unicode,
             'email': unicode,
-            'password': unicode
+            'password': unicode,
+            'salt': unicode
     }
 
-    required_fields = ['name', 'email', 'password']
+    required_fields = ['name', 'email', 'password', 'salt']
     validators = {'name': name_validator, 'email': email_validator}
