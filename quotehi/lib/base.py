@@ -7,6 +7,9 @@ from pylons.templating import render_mako as render
 
 class BaseController(WSGIController):
 
+    connection = config['pylons.app_globals'].connection
+    db = config['pylons.app_globals'].db
+
     def __call__(self, environ, start_response):
         """Invoke the Controller"""
         # WSGIController.__call__ dispatches to the Controller method
