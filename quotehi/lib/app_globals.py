@@ -4,6 +4,7 @@ from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 from pylons import config
 from mongokit import Connection
+from quotehi.model import register_models
 
 
 class Globals(object):
@@ -26,4 +27,5 @@ class Globals(object):
     
         self.connection = Connection(mongo_host, mongo_port)
         self.db = self.connection[mongo_db]
+        self.connection.register(register_models)
 
