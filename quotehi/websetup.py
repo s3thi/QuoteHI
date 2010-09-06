@@ -3,10 +3,12 @@ import logging
 
 import pylons.test
 from quotehi.config.environment import load_environment
-import pymongo
+from quotehi.model.user import User
 from getpass import getpass
-from random import random
+import random
 from hashlib import sha256
+from mongokit import Connection
+
 
 log = logging.getLogger(__name__)
 
@@ -16,18 +18,36 @@ def setup_app(command, conf, vars):
     if not pylons.test.pylonsapp:
         load_environment(conf.global_conf, conf.local_conf)
     
+    db_conn = connect(conf)
+    db_conn.register([User])
+    users_collection = db_conn[conf['mongo.db']].users
+    
+    if usercount(users_collection) == 0:
+        print('No existing users found. Creating new user ...')
+        
+        name = raw_input('Login name for new user: ')
+        email = raw_input('Email for new user: ')
+        password = getpass('Password for new user: ')
+        user = users_collection.User()
+        user['name'], user['email'] = unicode(name), unicode(email)
+        user['password'] = unicode(encrypt_password(email, password))
+        user.save()
+
+
+def encrypt_password(email, password):
+        random.seed()
+        salt = random.randint(10000000000, 99999999999)
+        return sha256(password + str(salt) + email).hexdigest()
+
+
+def usercount(db):
+    return db.find().count()
+
+
+def connect(conf):
     mongo_host = conf['mongo.host']
+    mongo_port = int(conf['mongo.port'])
     mongo_db = conf['mongo.db']
     
-    try:
-        db_conn = pymongo.Connection(mongo_host)
-    except pymongo.errors.ConnectionFailure:
-        raise Exception('Could not connect to MongoDB.')
-    
-    db = db_conn[mongo_db]
-    email = raw_input('Enter admin email: ')
-    password = getpass('Enter password: ')
-    salt = int(random() * 10000000000)
-    encrypted_password = sha256(password + str(salt) + email).hexdigest()
-    db.users.insert({'email': email, 'password': encrypted_password,
-                     'salt': salt})
+    return Connection(mongo_host, mongo_port)
+
