@@ -9,5 +9,3 @@ def connect():
     
     return Connection(mongo_host, mongo_port)
 
-def usercount():
-    return 0
