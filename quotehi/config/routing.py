@@ -19,6 +19,11 @@ def make_map(config):
     map.connect('/error/{action}/{id}', controller='error')
 
     # CUSTOM ROUTES HERE
+    map.connect('home', '/', controller='show', action='index')
+    map.connect('queued', '/queued', controller='show', action='queued')
+    map.connect('flagged', '/flagged', controller='show', action='flagged')
+    map.connect('add', '/add', controller='post', action='add')
+    map.connect('login', '/login', controller='admin', action='login')
 
     map.connect('/{controller}/{action}')
     map.connect('/{controller}/{action}/{id}')

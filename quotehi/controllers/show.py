@@ -16,7 +16,7 @@ class ShowController(BaseController):
         self._setup_pagination('quotes', id)
         return render('/index.html')
 
-    def queue(self, id=1):
+    def queued(self, id=1):
         self._setup_pagination('quotes.queue', id)
         return render('/queue.html')
 
