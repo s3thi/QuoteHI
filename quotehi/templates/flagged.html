@@ -1,5 +1,7 @@
 <%inherit file="/base.html"/>
 
+<%def name="title()">Flagged Quotes</%def>
+
 <script language="javascript" type="text/javascript">
   $(document).ready(function() {
     $(".approve").click(function() {
@@ -15,41 +17,38 @@
             var color = "#ff0000";
           $("div#" + id).css("background-color", color);
           $("div#" + id).fadeOut(500);
-        },
-      });
-    });
-  });
+        }, // anonymous function
+      });  // $.ajax
+    });    // click event
+  });      // ready event
 </script>
 
 % if c.quotes.count() == 0:
-  <p>Nothing to see here, please move along.</p>
+    <p>Nothing to see here, please move along.</p>
 % else:
 %   for quote in c.quotes:
-  <div id="${quote['_id']}" style="background-color:#EEEEFF">
-      <pre>${quote['quote']}</pre>
-      <strong>Tags:</strong>
-%     for tag in quote['tags']:
-        ${tag} 
-%     endfor
-%     if quote['notes']:
+      <div id="${quote['_id']}" style="background-color:#EEEEFF">
+        <pre>${quote['quote']}</pre>
+        <strong>Tags:</strong>
+%       for tag in quote['tags']:
+          ${tag} 
+%       endfor
+%       if quote['notes']:
           <p><strong>Notes:</strong> ${quote['notes']}</p>
-%     endif
-      <p><strong>ID:</strong> ${quote['_id']}</p>
-      <p>
-%          if session.get('logged_in') is True:
-             <button class="approve"
-  		   id="delete" value="${url(controller='admin',
-  				      action='delete',
-				      id=quote['_id'])}">Delete</button>
-             <button class="approve" 
-  		   id="unflag" value="${url(controller='admin',
-  				      action='unflag',
-  				      id=quote['_id'])}">Unflag</button>
-%          endif
-  </div>
+%       endif
+        <p><strong>ID:</strong> ${quote['_id']}</p>
+        <p>
+%         if session.get('logged_in') is True:
+            <button class="approve" id="delete"
+              value="${url(controller='admin', action='delete',
+                id=quote['_id'])}">Delete</button>
+            <button class="approve" id="unflag"
+              value="${url(controller='admin', action='unflag',
+  			    id=quote['_id'])}">Unflag</button>
+%         endif
+      </div>
 %   endfor
 % endif
 
 ${self.paginate('show', 'flagged', c.pages, c.current_page)}
 
-<%def name="title()">Flagged Quotes</%def>

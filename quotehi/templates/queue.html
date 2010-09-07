@@ -1,4 +1,3 @@
-
 <%inherit file="/base.html"/>
 
 <script language="javascript" type="text/javascript">
@@ -16,10 +15,10 @@
             var color = "#ff0000";
           $("div#" + id).css("background-color", color);
           $("div#" + id).fadeOut(500);
-        },
-      });
-    });
-  });
+        }, // anonymous function
+      });  // $.ajax
+    });    // click event
+  });      // ready event
 </script>
 
 % if c.quotes.count() == 0:

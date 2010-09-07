@@ -1,8 +1,8 @@
-
 <%inherit file="/base.html"/>
 
-<script language="javascript" type="text/javascript">
+<%def name="title()">Home</%def>
 
+<script language="javascript" type="text/javascript">
   $(document).ready(function() {
     $("button#flag").click(function() {
       $.ajax({
@@ -11,10 +11,10 @@
         "context": $(this),
         "success": function() {
           $(this).fadeOut(150);
-        }
-      });
-    });
-  });
+        } // anonymous function
+      }); // $.ajax
+    });   // click event
+  });     // ready event
 
   function vote_request(url, id, delta) {
     vote_buttons = document.getElementById("vote_" + id);
@@ -42,43 +42,38 @@
 </script>
 
 % for quote in c.quotes:
-<div id="quote" style="background-color:#EEEEFF">
+  <div id="quote" style="background-color:#EEEEFF">
     <pre>${quote['quote']}</pre>
     <strong>Tags:</strong>
 %   for tag in quote['tags']:
       ${tag} 
 %   endfor
 %   if quote['notes']:
-        <p><strong>Notes:</strong> ${quote['notes']}</p>
+      <p><strong>Notes:</strong> ${quote['notes']}</p>
 %   endif
-    <p><strong>ID:</strong> ${quote['_id']}</p>
-    <p>
-    <span id="count_${quote['_id']}">${quote['votes']} votes </span>
-%     if str(quote['_id']) not in session: 
-      <span id="vote_${quote['_id']}"> 
-      <button type="button" onclick="vote_request('${url(controller='post',
-				      action='vote_up',
-				      id=str(quote['_id']))}',
-				      '${str(quote['_id'])}', 1)">
-	 Vote Up</button>
-       <button type="button" onclick="vote_request('${url(controller='post',
-				      action='vote_down',
-				      id=str(quote['_id']))}',
-				      '${str(quote['_id'])}', -1)">
-	 Vote Down</button>
-%        if not 'flagged' in quote:
-       <button id="flag" value="${url(controller='post', action='flag',
-				id=quote['_id'])}">Flag</button>
-%        endif
-%        if session.get('logged_in') is True:
-           <button onclick="delete()">Delete</button>
-%        endif
-       </span>
-%      endif
+      <p><strong>ID:</strong> ${quote['_id']}</p>
+      <p>
+        <span id="count_${quote['_id']}">${quote['votes']} votes </span>
+%       if str(quote['_id']) not in session: 
+          <span id="vote_${quote['_id']}"> 
+          <button type="button" onclick="vote_request('${url(controller='post',
+            action='vote_up', id=str(quote['_id']))}',
+            '${str(quote['_id'])}', 1)">Vote Up</button>
+          <button type="button" onclick="vote_request('${url(controller='post',
+            action='vote_down', id=str(quote['_id']))}',
+            '${str(quote['_id'])}', -1)">Vote Down</button>
+%         if not 'flagged' in quote:
+          <button id="flag" value="${url(controller='post', action='flag',
+		    id=quote['_id'])}">Flag</button>
+%         endif
+%         if session.get('logged_in') is True:
+            <button onclick="delete()">Delete</button>
+%         endif
+        </span>
+%     endif
     </p>
-</div>
+  </div>
 % endfor
 
 ${self.paginate('show', 'index', c.pages, c.current_page)}
 
-<%def name="title()">Home</%def>

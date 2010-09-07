@@ -1,5 +1,6 @@
-
 <%inherit file="base.html"/>
+
+<%def name="title()">Add New Quote</%def>
 
 <script language="javascript" type="text/javascript">
   $(document).ready(function() {
@@ -9,21 +10,23 @@
       else {
         $(this).html("Adding quote ...").attr("disabled", "disabled");
         $.ajax({
-          "url": "${url(controller='post', action='add')}",
-          "data": {"quote": $("textarea#quote").val(), 
-                   "notes": $("input#notes").val(),
-                   "tags": $("input#tags").val()},
+          "url": "${url('add')}",
+          "data": {
+                    "quote": $("textarea#quote").val(), 
+                    "notes": $("input#notes").val(),
+                    "tags": $("input#tags").val()
+                  },
           "type": "POST",
           "success": function() {
             $("button#add").html("Add Quote").attr("disabled", "");
             $("div#status")
               .html("Done! You may continue adding quotes below.")
               .hide().fadeIn(500);
-          }
-        });
-      }
-    });
-  });
+          } // anonymous function
+        }); // $.ajax
+      }     // else
+    });     // click event
+  });       // ready event
 </script>
 
 <div id="status"></div>
@@ -32,4 +35,3 @@
 <p>Tags:<br/>${h.text('tags')}</p>
 <p><button id="add">Add Quote</button></p>
 
-<%def name="title()">Add New Quote</%def>
