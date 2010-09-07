@@ -18,15 +18,15 @@
 <%def name="header()">
   <h1>QuoteHI</h1>
   <p>
-    <a href="${url(controller='show', action='index')}">Home</a>
-    <a href="${url(controller='post', action='add')}">Add</a>
-    <a href="${url(controller='show', action='queue')}">Queue</a>
-    <a href="${url(controller='show', action='flagged')}">Flagged</a>
+    <a href="${url('home')}">Home</a>
+    <a href="${url('add')}">Add</a>
+    <a href="${url('queued')}">Queue</a>
+    <a href="${url('flagged')}">Flagged</a>
 %   if session.get('logged_in') is True: 
-      <a href="${url(controller='admin', action='logout')}">
+      <a href="${url('logout')}">
 	Logout (${session.get('email')})</a>
 %   else:
-      <a href="${url(controller='admin', action='login')}">Login</a>
+      <a href="${url('login')}">Login</a>
 %   endif
   <hr />
 </%def>

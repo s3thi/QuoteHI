@@ -24,6 +24,7 @@ def make_map(config):
     map.connect('flagged', '/flagged', controller='show', action='flagged')
     map.connect('add', '/add', controller='post', action='add')
     map.connect('login', '/login', controller='admin', action='login')
+    map.connect('logout', '/logout', controller='admin', action='logout')
 
     map.connect('/{controller}/{action}')
     map.connect('/{controller}/{action}/{id}')
